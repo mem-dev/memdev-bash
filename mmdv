@@ -3,7 +3,7 @@
  HISTCONTROL=ignoreboth:erasedups
  set -o history
  
- BASE_URL=http://localhost:3000/
+ BASE_URL=https://mem.dev/
  
  if [[ -f /tmp/memdev.txt ]]; then
    read MEMDEV_TOKEN < /tmp/memdev.txt
