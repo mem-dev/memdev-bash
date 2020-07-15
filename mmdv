@@ -29,7 +29,7 @@
  BLUE="\033[0;34m"
  GREEN="\033[0;32m"
  retry="y"
- 
+
  function select_option {
  
      ESC=$( printf "\033")
@@ -101,9 +101,12 @@
 
         select_option "${options[@]}"
         choice=$?
-        final_cmd=options[$choice]
+		selected_cmd="${options[$choice]}"
 
-        read -p "Command: " -i "${options[$choice]}" -e final_cmd
+		# Allow user to manually update `$selected_cmd` or press [Enter] to accept `default` value.  
+		read -p "Command: [default=\"$selected_cmd\"]: " final_cmd 
+		: ${final_cmd:=$selected_cmd}
+
         while [ -z $title ]; do
             read -p "What did this command do: " -e title
         done
