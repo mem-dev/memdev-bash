@@ -1,5 +1,18 @@
 #!/bin/bash
- HISTFILE=~/.bash_history
+
+ active_shell=$(ps -o command | grep -v -e "\<ps\>" -e grep -e tail | tail -3)
+ if [[ $active_shell == *"fish"* ]]; then
+    active_shell="fish"
+ else
+    active_shell="bash"
+ fi
+
+ if [[ $active_shell == "fish" ]]; then
+    HISTFILE=~/.local/share/fish/fish_history
+ else
+    HISTFILE=~/.bash_history
+ fi
+
  HISTCONTROL=ignoreboth:erasedups
  set -o history
  
@@ -16,7 +29,7 @@
  BLUE="\033[0;34m"
  GREEN="\033[0;32m"
  retry="y"
- 
+
  function select_option {
  
      ESC=$( printf "\033")
@@ -76,15 +89,24 @@
 
  function start_selection {
      while [ $retry = "y" ]; do
-        prev_cmds=`history 15 | cut -c 8- | awk '!x[$0]++'`
+
+		if [[ $active_shell == "fish" ]]; then
+			prev_cmds=`history 25 | cut -c 8- | grep "cmd" | sed -e 's/- cmd: //g' | awk '!x[$0]++'`
+		else
+			prev_cmds=`history 10 | cut -c 8- | awk '!x[$0]++'`
+		fi
+		
         echo -e "Mem.dev: Choose which command would you like to save:\n"
         options=($prev_cmds)
 
         select_option "${options[@]}"
         choice=$?
-        final_cmd=options[$choice]
+		selected_cmd="${options[$choice]}"
 
-        read -p "Command: " -i "${options[$choice]}" -e final_cmd
+		# Allow user to manually update `$selected_cmd` or press [Enter] to accept `default` value.  
+		read -p "Command: [default=\"$selected_cmd\"]: " final_cmd 
+		: ${final_cmd:=$selected_cmd}
+
         while [ -z $title ]; do
             read -p "What did this command do: " -e title
         done
