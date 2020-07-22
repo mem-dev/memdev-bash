@@ -4,8 +4,9 @@
 
 1. Download the repo
 2. `cd` to the repo's directory
-3. Run `sudo make install`
-4. Run `mmdv`
+3. Run `chmod +x ./mmdv`
+4. Run `sudo make install`
+5. Run `mmdv`
 
 ### Development
 
