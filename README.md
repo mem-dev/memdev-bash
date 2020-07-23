@@ -16,3 +16,14 @@
 4. Clone mem.dev bash repo ([https://github.com/mem-dev/memdev-bash/](https://github.com/mem-dev/memdev-bash/))
 4. Open `mmdv` file and change the value of `BASE_URL` to the copied URL.
 5. Run `./mmdv` in terminal.
+
+### Known Issues
+
+1. By default, bash doesn't automatically save command prompts to the $HISTFILE. A possible fix is to add the following to your ~/.bashrc file:
+
+```
+# ~/.bashrc
+
+export HISTFILE=~/.bash_history
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+```
